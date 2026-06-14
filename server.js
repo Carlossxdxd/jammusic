@@ -59,7 +59,13 @@ io.on('connection', (socket) => {
     const sala = socket.data.sala;
     if (!sala || !salas[sala]) return;
 
-    salas[sala].cola.push(video);
+    // Si mandan un array (al quitar un video), reemplazar la cola
+    if (Array.isArray(video)) {
+      salas[sala].cola = video;
+    } else {
+      salas[sala].cola.push(video);
+    }
+
     io.to(sala).emit('cola-actualizada', salas[sala].cola);
   });
 
