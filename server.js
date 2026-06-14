@@ -11,6 +11,12 @@ const io = new Server(server);
 // Servir archivos estáticos desde /public
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+});
+
 // Guardar el estado de cada sala en memoria
 const salas = {};
 
