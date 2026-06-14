@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JamSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="inicio-wrapper">
+  <div class="inicio-card">
+
+    <div class="inicio-logo">
+      <div class="logo-dot"></div>
+      JamSync
+    </div>
+    <p class="inicio-sub">Escuchá música en sincronía con tus amigos</p>
+
+    <!-- Crear sala -->
+    <p class="seccion-titulo">Crear una sala nueva</p>
+    <input
+      type="text"
+      id="input-nombre-crear"
+      class="input-field"
+      placeholder="Tu nombre"
+      maxlength="20"
+    >
+    <input
+      type="text"
+      id="input-nombre-sala"
+      class="input-field"
+      placeholder="Nombre de la sala (ej: Noche de lofi)"
+      maxlength="30"
+    >
+    <button class="btn-primary" onclick="crearSala()">
+      Crear sala
+    </button>
+
+    <div class="divider">o</div>
+
+    <!-- Unirse a sala -->
+    <p class="seccion-titulo">Unirse a una sala existente</p>
+    <input
+      type="text"
+      id="input-nombre-unirse"
+      class="input-field"
+      placeholder="Tu nombre"
+      maxlength="20"
+    >
+    <input
+      type="text"
+      id="input-codigo"
+      class="input-field"
+      placeholder="Código de sala (ej: XK-4829)"
+      maxlength="10"
+      style="text-transform: uppercase;"
+    >
+    <button class="btn-primary" style="background: var(--surface2); border: 1px solid var(--border2);" onclick="unirseASala()">
+      Unirse a sala
+    </button>
+
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
