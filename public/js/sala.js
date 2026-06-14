@@ -15,6 +15,14 @@ if (!codigoSala) {
 // ── Socket ──
 const socket = io();
 
+// Colores deterministas por nombre
+const COLORS = ['#7C5CFF','#FF5C7A','#3DFFB0','#FFB347','#5CE1FF','#FF8C5C','#C45CFF','#5CFF8C'];
+function colorDeNombre(nom) {
+  let h = 0;
+  for (let i = 0; i < nom.length; i++) h = (h * 31 + nom.charCodeAt(i)) & 0xFFFFFF;
+  return COLORS[Math.abs(h) % COLORS.length];
+}
+
 // ── YouTube Player ──
 let player       = null;
 let ytListo      = false;
@@ -491,10 +499,4 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-// Colores deterministas por nombre
-const COLORS = ['#7C5CFF','#FF5C7A','#3DFFB0','#FFB347','#5CE1FF','#FF8C5C','#C45CFF','#5CFF8C'];
-function colorDeNombre(nom) {
-  let h = 0;
-  for (let i = 0; i < nom.length; i++) h = (h * 31 + nom.charCodeAt(i)) & 0xFFFFFF;
-  return COLORS[Math.abs(h) % COLORS.length];
-}
+
