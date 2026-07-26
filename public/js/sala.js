@@ -123,30 +123,20 @@ function onPlayerReady(e) {
   iniciarTick();
 }
 
-// ── FIX: solo sincronizar en cambios reales de play/pause ──
-// Antes: cualquier cambio de estado (incluido BUFFERING, CUED, UNSTARTED)
-// emitía sync-video con reproduciendo=false, pausando la sala entera
-// cada vez que a un usuario se le cortaba un instante el buffer.
+// ── FIX: NO sincronizar desde onPlayerStateChange ──
+// Este evento se dispara con cualquier cambio de estado del player,
+// incluyendo pausas automáticas que no vienen de un clic del usuario:
+// BUFFERING, CUED, UNSTARTED, y pausas que el navegador o YouTube
+// disparan solos al minimizar o cambiar de pestaña.
+// Por eso el sync-video ahora se emite SOLO desde las acciones
+// explícitas del usuario (botón play/pause, next/prev, cola, progreso).
+// Acá únicamente actualizamos el ícono local y manejamos el fin del video.
 function onPlayerStateChange(e) {
   const reproduciendo = e.data === YT.PlayerState.PLAYING;
 
   // Actualizar icono
   iconPlay.style.display  = reproduciendo ? 'none' : 'block';
   iconPause.style.display = reproduciendo ? 'block' : 'none';
-
-  // Solo emitir sync en PLAYING o PAUSED reales.
-  // Se ignoran BUFFERING (3), CUED (5) y UNSTARTED (-1).
-  const esCambioRealPlayPause =
-    e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.PAUSED;
-
-  if (!ignoreSync && esCambioRealPlayPause) {
-    const ts = player.getCurrentTime();
-    socket.emit('sync-video', {
-      videoId: videoActual?.videoId,
-      timestamp: ts,
-      reproduciendo
-    });
-  }
 
   if (e.data === YT.PlayerState.ENDED) {
     siguienteVideo();
@@ -168,12 +158,21 @@ function iniciarTick() {
 // ─────────────────────────────────────────────
 btnPlay.addEventListener('click', () => {
   if (!player) return;
-  const state = player.getPlayerState();
-  if (state === YT.PlayerState.PLAYING) {
-    player.pauseVideo();
-  } else {
+  const state    = player.getPlayerState();
+  const vaAJugar = state !== YT.PlayerState.PLAYING;
+
+  if (vaAJugar) {
     player.playVideo();
+  } else {
+    player.pauseVideo();
   }
+
+  // Única fuente de sync para play/pause: el clic explícito del usuario.
+  socket.emit('sync-video', {
+    videoId: videoActual?.videoId,
+    timestamp: player.getCurrentTime(),
+    reproduciendo: vaAJugar
+  });
 });
 
 btnNext.addEventListener('click', () => siguienteVideo());
