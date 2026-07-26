@@ -123,6 +123,10 @@ function onPlayerReady(e) {
   iniciarTick();
 }
 
+// ── FIX: solo sincronizar en cambios reales de play/pause ──
+// Antes: cualquier cambio de estado (incluido BUFFERING, CUED, UNSTARTED)
+// emitía sync-video con reproduciendo=false, pausando la sala entera
+// cada vez que a un usuario se le cortaba un instante el buffer.
 function onPlayerStateChange(e) {
   const reproduciendo = e.data === YT.PlayerState.PLAYING;
 
@@ -130,7 +134,12 @@ function onPlayerStateChange(e) {
   iconPlay.style.display  = reproduciendo ? 'none' : 'block';
   iconPause.style.display = reproduciendo ? 'block' : 'none';
 
-  if (!ignoreSync) {
+  // Solo emitir sync en PLAYING o PAUSED reales.
+  // Se ignoran BUFFERING (3), CUED (5) y UNSTARTED (-1).
+  const esCambioRealPlayPause =
+    e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.PAUSED;
+
+  if (!ignoreSync && esCambioRealPlayPause) {
     const ts = player.getCurrentTime();
     socket.emit('sync-video', {
       videoId: videoActual?.videoId,
@@ -498,5 +507,3 @@ function escHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-
-
