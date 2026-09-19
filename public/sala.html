@@ -3,162 +3,693 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JamSync – Sala</title>
+
+  <title>JamSync | Bee 🐝🌱</title>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
 <div class="app">
 
-  <!-- ── Header ── -->
-  <header>
-    <div class="logo">
-      <div class="logo-dot"></div>
-      JamSync hola
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+  <header class="main-header">
+
+    <!-- Brand -->
+    <div class="brand">
+
+      <div class="brand-icon">
+        🐝
+      </div>
+
+      <div class="brand-text">
+        <div class="brand-name">
+          JamSync
+        </div>
+
+        <div class="brand-powered">
+          by <span>Bee 🌱</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="sala-info">
-      <span class="sala-badge">Sala</span>
-      <span class="sala-nombre" id="display-nombre-sala">–</span>
-      <span class="sala-codigo" id="display-codigo-sala" title="Clic para copiar">–</span>
+
+    <!-- Room information -->
+    <div class="room-info">
+
+      <div class="room-label">
+        <span class="room-status-dot"></span>
+        SALA
+      </div>
+
+      <div class="room-details">
+
+        <span
+          class="room-name"
+          id="display-nombre-sala">
+          –
+        </span>
+
+        <button
+          class="room-code"
+          id="display-codigo-sala"
+          title="Copiar código de sala">
+          <span class="room-code-icon">#</span>
+          <span>–</span>
+        </button>
+
+      </div>
+
     </div>
 
+
+    <!-- Header actions -->
     <div class="header-actions">
-      <div class="avatar-stack" id="avatar-stack"></div>
+
+      <div class="online-users">
+
+        <div
+          class="avatar-stack"
+          id="avatar-stack">
+        </div>
+
+        <span class="online-label">
+          Conectados
+        </span>
+
+      </div>
+
+      <button
+        class="header-btn"
+        id="btn-room-menu"
+        title="Opciones de sala">
+
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+
+          <circle cx="12" cy="12" r="1"/>
+          <circle cx="19" cy="12" r="1"/>
+          <circle cx="5" cy="12" r="1"/>
+
+        </svg>
+
+      </button>
+
     </div>
+
   </header>
 
-  <!-- ── Main ── -->
-  <main>
-    <!-- Video -->
-    <div class="video-wrapper" id="video-wrapper">
-      <!-- Pantalla vacía -->
-      <div id="pantalla-vacia" style="display:flex; flex-direction:column; align-items:center; gap:12px; color:var(--muted);">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
-        </svg>
-        <span style="font-size:13px;">Buscá un video y agregalo a la cola</span>
-      </div>
 
-      <!-- Overlay "Now playing" -->
-      <div class="now-playing-bar" id="now-playing-bar" style="display:none;">
-        <div class="now-playing-badge">
-          <div class="np-dot"></div>
-          En reproducción
-        </div>
-        <div class="now-playing-title" id="np-titulo">–</div>
-      </div>
+  <!-- =====================================================
+       MAIN CONTENT
+  ====================================================== -->
 
-      <!-- iFrame de YouTube (oculto, se muestra al cargar video) -->
-      <div id="yt-player" style="position:absolute;inset:0;width:100%;height:100%;display:none;"></div>
-    </div>
+  <main class="main-content">
 
-    <!-- Controles -->
-    <div class="player-controls">
-      <div class="progress-area">
-        <span class="time-label" id="time-current">0:00</span>
-        <div class="progress-track" id="progress-track">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <span class="time-label" id="time-total">0:00</span>
-      </div>
+    <!-- =================================================
+         VIDEO PLAYER
+    ================================================== -->
 
-      <div class="controls-row">
-        <button class="ctrl-btn" id="btn-prev" title="Anterior">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-        </button>
+    <section class="player-section">
 
-        <button class="ctrl-btn play" id="btn-play" title="Play / Pause">
-          <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-        </button>
+      <div
+        class="video-wrapper"
+        id="video-wrapper">
 
-        <button class="ctrl-btn" id="btn-next" title="Siguiente">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/></svg>
-        </button>
+        <!-- Empty state -->
+        <div
+          class="empty-player"
+          id="pantalla-vacia">
 
-        <div class="volume-group">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--muted2)"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05A4.5 4.5 0 0 0 16.5 12z"/></svg>
-          <input type="range" id="volume-slider" min="0" max="100" value="80">
+          <div class="empty-player-icon">
+
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="currentColor">
+
+              <polygon points="8,5 19,12 8,19"></polygon>
+
+            </svg>
+
+          </div>
+
+          <div class="empty-player-title">
+            Tu sala está lista
+          </div>
+
+          <div class="empty-player-description">
+            Buscá una canción y agregala a la cola
+          </div>
+
         </div>
 
-        <div class="sync-status">
-          <div class="sync-dot"></div>
-          Sincronizado
+
+        <!-- Now playing overlay -->
+
+        <div
+          class="now-playing-bar"
+          id="now-playing-bar"
+          style="display:none;">
+
+          <div class="now-playing-badge">
+
+            <span class="np-dot"></span>
+
+            Reproduciendo
+
+          </div>
+
+          <div
+            class="now-playing-title"
+            id="np-titulo">
+            –
+          </div>
+
         </div>
+
+
+        <!-- YouTube player -->
+
+        <div
+          id="yt-player"
+          class="youtube-player"
+          style="display:none;">
+        </div>
+
       </div>
-    </div>
-  </main>
 
-  <!-- ── Sidebar ── -->
-  <aside class="sidebar">
-    <div class="sidebar-tabs">
-      <div class="tab active" data-tab="buscar">Buscar</div>
-      <div class="tab" data-tab="cola">Cola</div>
-      <div class="tab" data-tab="chat">Chat</div>
-    </div>
 
-    <!-- Tab: Buscar -->
-    <div class="tab-content active" id="tab-buscar">
-      <div class="search-area">
-        <div class="search-box">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      <!-- =================================================
+           PLAYER CONTROLS
+      ================================================== -->
+
+      <div class="player-controls">
+
+        <!-- Progress -->
+
+        <div class="progress-area">
+
+          <span
+            class="time-label"
+            id="time-current">
+            0:00
+          </span>
+
+          <div
+            class="progress-track"
+            id="progress-track">
+
+            <div
+              class="progress-fill"
+              id="progress-fill">
+            </div>
+
+          </div>
+
+          <span
+            class="time-label"
+            id="time-total">
+            0:00
+          </span>
+
+        </div>
+
+
+        <!-- Controls row -->
+
+        <div class="controls-row">
+
+          <!-- Previous -->
+
+          <button
+            class="ctrl-btn"
+            id="btn-prev"
+            title="Anterior">
+
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="currentColor">
+
+              <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+
+            </svg>
+
+          </button>
+
+
+          <!-- Play -->
+
+          <button
+            class="ctrl-btn play"
+            id="btn-play"
+            title="Reproducir / Pausar">
+
+            <svg
+              id="icon-play"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="currentColor">
+
+              <path d="M8 5v14l11-7z"/>
+
+            </svg>
+
+            <svg
+              id="icon-pause"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style="display:none;">
+
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+
+            </svg>
+
+          </button>
+
+
+          <!-- Next -->
+
+          <button
+            class="ctrl-btn"
+            id="btn-next"
+            title="Siguiente">
+
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="currentColor">
+
+              <path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/>
+
+            </svg>
+
+          </button>
+
+
+          <!-- Volume -->
+
+          <div class="volume-group">
+
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor">
+
+              <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+
+            </svg>
+
+            <input
+              type="range"
+              id="volume-slider"
+              min="0"
+              max="100"
+              value="80">
+
+          </div>
+
+
+          <!-- Sync -->
+
+          <div class="sync-status">
+
+            <span class="sync-dot"></span>
+
+            <span>
+              Sincronizado
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+      <!-- Tabs -->
+
+      <div class="sidebar-tabs">
+
+        <button
+          class="tab active"
+          data-tab="buscar">
+
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="16.5" y1="16.5" x2="21" y2="21"/>
+
           </svg>
-          <input type="text" id="input-buscar" placeholder="Buscar en YouTube…">
-          <button id="btn-buscar" style="background:none;border:none;color:var(--accent2);font-size:12px;padding:0 2px;white-space:nowrap;">
-            Buscar
-          </button>
-        </div>
-      </div>
-      <div class="results-list" id="results-list">
-        <div style="padding:24px 14px; text-align:center; color:var(--muted); font-size:12px;">
-          Buscá un artista, canción o álbum
-        </div>
-      </div>
-    </div>
 
-    <!-- Tab: Cola -->
-    <div class="tab-content" id="tab-cola">
-      <div class="cola-header">
-        <span class="cola-title">Cola de reproducción</span>
-        <span class="cola-count" id="cola-count">0 videos</span>
-      </div>
-      <div class="cola-list" id="cola-list">
-        <div style="padding:24px 14px; text-align:center; color:var(--muted); font-size:12px;" id="cola-vacia">
-          La cola está vacía
-        </div>
-      </div>
-    </div>
+          Buscar
 
-    <!-- Tab: Chat -->
-    <div class="tab-content" id="tab-chat">
-      <div class="chat-messages" id="chat-messages"></div>
+        </button>
 
-      <div class="chat-input-area">
-        <div class="emoji-row">
-          <button class="emoji-btn" data-emoji="🔥">🔥</button>
-          <button class="emoji-btn" data-emoji="🎵">🎵</button>
-          <button class="emoji-btn" data-emoji="😂">😂</button>
-          <button class="emoji-btn" data-emoji="❤️">❤️</button>
-          <button class="emoji-btn" data-emoji="👏">👏</button>
-        </div>
-        <div class="chat-input-box">
-          <input type="text" id="chat-input" placeholder="Escribí algo…" maxlength="200">
-          <button class="send-btn" id="btn-enviar">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
-        </div>
+
+        <button
+          class="tab"
+          data-tab="cola">
+
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+
+          </svg>
+
+          Cola
+
+          <span
+            class="tab-count"
+            id="cola-count">
+            0
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="chat">
+
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+
+            <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.7 8.7 0 0 1-4-.9L3 21l1.9-4.7A8.4 8.4 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>
+
+          </svg>
+
+          Chat
+
+        </button>
+
       </div>
-    </div>
-  </aside>
+
+
+      <!-- =================================================
+           SEARCH TAB
+      ================================================== -->
+
+      <div
+        class="tab-content active"
+        id="tab-buscar">
+
+        <div class="search-area">
+
+          <div class="search-box">
+
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+
+            </svg>
+
+            <input
+              type="text"
+              id="input-buscar"
+              placeholder="Buscar canción, artista o álbum…">
+
+            <button
+              id="btn-buscar">
+
+              Buscar
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="results-list"
+          id="results-list">
+
+          <div class="empty-sidebar">
+
+            <div class="empty-sidebar-icon">
+              🎵
+            </div>
+
+            <span>
+              Buscá música para comenzar
+            </span>
+
+            <small>
+              YouTube · Canciones · Artistas
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           QUEUE TAB
+      ================================================== -->
+
+      <div
+        class="tab-content"
+        id="tab-cola">
+
+        <div class="cola-header">
+
+          <div>
+
+            <span class="cola-title">
+              Cola de reproducción
+            </span>
+
+            <span class="cola-subtitle">
+              Música de la sala
+            </span>
+
+          </div>
+
+          <span
+            class="cola-count-label"
+            id="cola-count-label">
+            0 videos
+          </span>
+
+        </div>
+
+
+        <div
+          class="cola-list"
+          id="cola-list">
+
+          <div
+            class="empty-sidebar"
+            id="cola-vacia">
+
+            <div class="empty-sidebar-icon">
+              🐝
+            </div>
+
+            <span>
+              La cola está vacía
+            </span>
+
+            <small>
+              Agregá canciones desde Buscar
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CHAT TAB
+      ================================================== -->
+
+      <div
+        class="tab-content"
+        id="tab-chat">
+
+        <div
+          class="chat-messages"
+          id="chat-messages">
+        </div>
+
+
+        <div class="chat-input-area">
+
+          <!-- Quick reactions -->
+
+          <div class="emoji-row">
+
+            <button
+              class="emoji-btn"
+              data-emoji="🔥">
+              🔥
+            </button>
+
+            <button
+              class="emoji-btn"
+              data-emoji="🎵">
+              🎵
+            </button>
+
+            <button
+              class="emoji-btn"
+              data-emoji="😂">
+              😂
+            </button>
+
+            <button
+              class="emoji-btn"
+              data-emoji="❤️">
+              ❤️
+            </button>
+
+            <button
+              class="emoji-btn"
+              data-emoji="👏">
+              👏
+            </button>
+
+          </div>
+
+
+          <!-- Message input -->
+
+          <div class="chat-input-box">
+
+            <input
+              type="text"
+              id="chat-input"
+              placeholder="Escribí algo…"
+              maxlength="200">
+
+            <button
+              class="send-btn"
+              id="btn-enviar"
+              title="Enviar">
+
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           BEE BRAND FOOTER
+      ================================================== -->
+
+      <div class="bee-footer">
+
+        <div class="bee-footer-logo">
+          🐝
+        </div>
+
+        <div class="bee-footer-text">
+
+          <strong>
+            Bee 🌱
+          </strong>
+
+          <span>
+            Conectando personas a través de la música
+          </span>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+  </main>
 
 </div>
 
+
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
+
 <script src="/socket.io/socket.io.js"></script>
+
 <script src="https://www.youtube.com/iframe_api"></script>
+
 <script src="js/sala.js"></script>
+
 </body>
 </html>
+
